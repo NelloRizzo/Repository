@@ -1,14 +1,13 @@
 package io.github.iamantoo.repository;
 
 import com.google.common.base.Objects;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FileRepositoryTest {
 
@@ -66,17 +65,18 @@ class FileRepositoryTest {
 
     @org.junit.jupiter.api.Test
     void testEquals() {
-        assertEquals(new MyData(1, "Primo"), new MyData(1, "Primo"));
+        Assertions.assertEquals(new MyData(1, "Primo"), new MyData(1, "Primo"), "Test uguaglianza non riuscito");
     }
 
     @org.junit.jupiter.api.Test
     void addOrUpdate() {
         repo.clear();
         repo.addOrUpdate(new MyData(1, "Primo"));
-        assertEquals(1, repo.getAll().toList().size());
-        repo.getAll().findFirst().ifPresentOrElse(i -> assertEquals(i.ints.size(), 100), () -> {
-            throw new RuntimeException();
-        });
+        Assertions.assertEquals(1, repo.getAll().toList().size(), "Mi aspettavo un solo elemento");
+        repo.getAll().findFirst().ifPresentOrElse(i -> Assertions.assertEquals(100, i.ints.size(), "Non è stata recuperata la lista interna"),
+                () -> {
+                    throw new RuntimeException();
+                });
     }
 
     @org.junit.jupiter.api.Test
@@ -84,7 +84,7 @@ class FileRepositoryTest {
         repo.clear();
         repo.addOrUpdate(new MyData(1, "Primo"));
         repo.get(d -> d.getValue() == 1).findFirst().ifPresent(repo::delete);
-        assertEquals(0, repo.getAll().toList().size());
+        Assertions.assertEquals(0, repo.getAll().toList().size(), "Cancellazione fallita");
     }
 
 }
