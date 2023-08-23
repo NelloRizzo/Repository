@@ -1,0 +1,4 @@
+name: Repository
+version: '1.0'
+main: io.github.iamantoo.repository.Repository
+api-version: '1.20'
